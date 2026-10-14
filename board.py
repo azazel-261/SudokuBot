@@ -42,7 +42,7 @@ class Board:
                     except:
                         pass
 
-        return valid_numbers
+        return list(valid_numbers)
 
     def print(self):
         for i in range(9):
@@ -60,19 +60,3 @@ class Board:
                 if not self.find_valid_numbers(i, j):
                     return False
         return True
-
-b = Board()
-b.data = [
-    [1, 2, 3, 0, 0, 0, 0, 0, 0],
-    [4, 5, 6, 0, 0, 0, 0, 0, 0],
-    [7, 8, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-]
-
-b.print()
-print(b.find_valid_numbers(3, 0))
