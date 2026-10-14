@@ -54,9 +54,22 @@ class Board:
                 print(self.data[i][j] if self.data[i][j] else "_", end="")
             print("\n", end="")
 
+    def pretty_print(self):
+        print("╒═══╤═══╤═══╕")
+        for i in range(9):
+            if i and not i % 3:
+                print("╞═══╪═══╪═══╡")
+            print("│", end="")
+            for j in range(9):
+                if j and not j % 3:
+                    print("│", end="")
+                print(self.data[i][j] if self.data[i][j] else " ", end="")
+            print("│\n", end="")
+        print("╘═══╧═══╧═══╛")
+
     def check_valid(self):
         for i in range(9):
             for j in range(9):
-                if not self.find_valid_numbers(i, j):
+                if self.data[i][j] and self.data[i][j] not in self.find_valid_numbers(i, j):
                     return False
         return True
