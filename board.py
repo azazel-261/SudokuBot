@@ -54,7 +54,7 @@ class Board:
                 print(self.data[i][j] if self.data[i][j] else "_", end="")
             print("\n", end="")
 
-    def pretty_print(self):
+    def pretty_print_old(self):
         print("╒═══╤═══╤═══╕")
         for i in range(9):
             if i and not i % 3:
@@ -64,8 +64,20 @@ class Board:
                 if j and not j % 3:
                     print("│", end="")
                 print(self.data[i][j] if self.data[i][j] else " ", end="")
-            print("│\n", end="")
+            print("│")
         print("╘═══╧═══╧═══╛")
+
+    def pretty_print(self):
+        print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")
+        for i in range(9):
+            print("║", end="")
+            for j in range(9):
+                print(self.data[i][j] if self.data[i][j] else " ", end="")
+                print("║" if not (j + 1) % 3 else "│", end="")
+            print("")
+            if i < 8:
+                print("╠═╪═╪═╬═╪═╪═╬═╪═╪═╣" if not (i + 1) % 3 else "╟─┼─┼─╫─┼─┼─╫─┼─┼─╢")
+        print("╚═╧═╧═╩═╧═╧═╩═╧═╧═╝")
 
     def check_valid(self):
         for i in range(9):

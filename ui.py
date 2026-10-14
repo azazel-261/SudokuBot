@@ -29,8 +29,7 @@ class ActionSelector:
  ▀█▄▄▄  █   █  █▀ ▀█  █▀ ▀█  █ ▄▀   █   █  █▄▄▄▄▀ █▀ ▀█    █      █   
      ▀█ █   █  █   █  █   █  █▀█    █   █  █    █ █   █    █      ▀   
  ▀▄▄▄█▀ ▀▄▄▀█  ▀█▄██  ▀█▄█▀  █  ▀▄  ▀▄▄▀█  █▄▄▄▄▀ ▀█▄█▀    ▀▄▄    █   
- """ + Fore.RESET
-              )
+ """ + Fore.RESET)
         print("======================================================================\n")
         for index, opt in enumerate(self.actions):
             if index == self.sel_pos:
@@ -47,7 +46,7 @@ class InteractiveBoard:
 
         self.board = board
 
-    def draw(self):
+    def draw_old(self):
         subprocess.call("cls", shell=True)
         print("╒═══╤═══╤═══╕")
         for i in range(9):
@@ -64,6 +63,22 @@ class InteractiveBoard:
             print("│\n", end="")
         print("╘═══╧═══╧═══╛")
 
+    def draw(self):
+        subprocess.call("cls", shell=True)
+        print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")
+        for i in range(9):
+            print("║", end="")
+            for j in range(9):
+                if self.select_row == i and self.select_col == j:
+                    print(Fore.BLUE + Back.WHITE, end="")
+                print(self.board.data[i][j] if self.board.data[i][j] else " ", end="")
+                print(Fore.RESET + Back.RESET, end="")
+                print("║" if not (j + 1) % 3 else "│", end="")
+            print("")
+            if i < 8:
+                print("╠═╪═╪═╬═╪═╪═╬═╪═╪═╣" if not (i + 1) % 3 else "╟─┼─┼─╫─┼─┼─╫─┼─┼─╢")
+        print("╚═╧═╧═╩═╧═╧═╩═╧═╧═╝")
+
 
 class InteractiveSolveBoard(InteractiveBoard):
     def on_keypress(self, key: pynput.keyboard.Key):
@@ -77,13 +92,13 @@ class InteractiveSolveBoard(InteractiveBoard):
             self.select_col += 1
         self.select_row %= 9
         self.select_col %= 9
+        if key == pynput.keyboard.Key.backspace:
+            self.board.data[self.select_row][self.select_col] = 0
         try:
             if key.char.isdigit() and key.char != "0":
                 self.board.data[self.select_row][self.select_col] = int(key.char)
         except AttributeError:
             pass
-        if key == pynput.keyboard.Key.backspace:
-            self.board.data[self.select_col][self.select_col] = 0
         self.draw()
 
 
