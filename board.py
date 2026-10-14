@@ -31,17 +31,16 @@ class Board:
 
         for i in range(3):
             for j in range(3):
-                if i == row and j == col:
-                    continue
                 local_row = subgrid_row + i
                 local_col = subgrid_col + j
+                if local_row == row and local_col == col:
+                    continue
                 number = self.data[local_row][local_col]
                 if number:
                     try:
                         valid_numbers.remove(number)
                     except:
                         pass
-
         return list(valid_numbers)
 
     def print(self):
@@ -53,19 +52,6 @@ class Board:
                     print(" ", end="")
                 print(self.data[i][j] if self.data[i][j] else "_", end="")
             print("\n", end="")
-
-    def pretty_print_old(self):
-        print("╒═══╤═══╤═══╕")
-        for i in range(9):
-            if i and not i % 3:
-                print("╞═══╪═══╪═══╡")
-            print("│", end="")
-            for j in range(9):
-                if j and not j % 3:
-                    print("│", end="")
-                print(self.data[i][j] if self.data[i][j] else " ", end="")
-            print("│")
-        print("╘═══╧═══╧═══╛")
 
     def pretty_print(self):
         print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")

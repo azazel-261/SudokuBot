@@ -46,31 +46,17 @@ class InteractiveBoard:
 
         self.board = board
 
-    def draw_old(self):
-        subprocess.call("cls", shell=True)
-        print("╒═══╤═══╤═══╕")
-        for i in range(9):
-            if i and not i % 3:
-                print("╞═══╪═══╪═══╡")
-            print("│", end="")
-            for j in range(9):
-                if j and not j % 3:
-                    print("│", end="")
-                if self.select_row == i and self.select_col == j:
-                    print(Fore.BLUE + Back.WHITE, end="")
-                print(self.board.data[i][j] if self.board.data[i][j] else " ", end="")
-                print(Fore.RESET + Back.RESET, end="")
-            print("│\n", end="")
-        print("╘═══╧═══╧═══╛")
-
     def draw(self):
         subprocess.call("cls", shell=True)
+        print(self.board.find_valid_numbers(self.select_row, self.select_col))
         print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")
         for i in range(9):
             print("║", end="")
             for j in range(9):
                 if self.select_row == i and self.select_col == j:
                     print(Fore.BLUE + Back.WHITE, end="")
+                if self.board.data[i][j] and self.board.data[i][j] not in self.board.find_valid_numbers(i, j):
+                    print(Fore.RED, end="")
                 print(self.board.data[i][j] if self.board.data[i][j] else " ", end="")
                 print(Fore.RESET + Back.RESET, end="")
                 print("║" if not (j + 1) % 3 else "│", end="")

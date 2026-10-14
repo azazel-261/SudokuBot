@@ -19,7 +19,6 @@ if __name__ == "__main__":
 
     b.draw()
 
-
     with pynput.keyboard.Listener(on_press = lambda key: b.on_keypress(key)) as listener:
         listener.join()
 
