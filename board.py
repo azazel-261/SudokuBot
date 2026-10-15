@@ -45,11 +45,7 @@ class Board:
 
     def print(self):
         for i in range(9):
-            if i and not i % 3:
-                print("")
             for j in range(9):
-                if j and not j % 3:
-                    print(" ", end="")
                 print(self.data[i][j] if self.data[i][j] else "_", end="")
             print("\n", end="")
 

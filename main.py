@@ -1,4 +1,4 @@
-import sys
+import sys, argparse
 
 import board, solver, generator, ui
 
@@ -78,6 +78,8 @@ def menu_generate():
     s_board = generator.generate_solved()
     u_board = generator.unsolve(s_board, remove)
 
+    subprocess.call("cls", shell=True)
+
     u_board.pretty_print()
 
     print("Press any key to exit...")
@@ -106,13 +108,81 @@ def menu():
 if __name__ == "__main__":
     colorama.init()
 
-    if len(sys.argv) < 2:
-        menu()
-    elif sys.argv[1] == "menu":
-        menu()
-    elif sys.argv[1] == "play":
-        menu_play()
-    elif sys.argv[1] == "solve":
+    parser = argparse.ArgumentParser(prog='main.py', description='Pass no arguments to use the interactive menu')
+
+    parser.add_argument('-r', '--raw',
+                        action='store_true',
+                        help='Use this flag to make the app return the raw result without the fancy borders. Only works outside of TUI')
+
+    parser.add_argument('-s', '--solve',
+                        help='Stand for interactive-solve. Use this flag to pass in an unsolved sudoku board as raw data (left to right, top to bottom, 0 or _ instead of empty fields)')
+    parser.add_argument('--isolve',
+                        action='store_true',
+                        help='Use this flag to pass your unsolved board via the fancy TUI')
+
+    parser.add_argument('-g', '--generate',
+                        help='Use this to generate a puzzle outside of the TUI. Pass the difficulty',
+                        choices=['easy', 'medium', 'hard'])
+    parser.add_argument('--igenerate',
+                        action='store_true',
+                        help='This flag is used to generate in the interactive TUI')
+
+    parser.add_argument('-p', '--play',
+                        action='store_true',
+                        help='Generate a board for you to attempt to solve, all within the fancy TUI')
+
+    args = parser.parse_args(sys.argv[1:])
+
+    if args.solve:
+        unsolved = board.Board()
+
+        try:
+            for i in range(81):
+                if args.solve[i] == '_':
+                    unsolved.data[i // 9][i % 9] = 0
+                else:
+                    unsolved.data[i // 9][i % 9] = int(args.solve[i])
+        except IndexError, ValueError:
+            print("Ill-formed board data")
+            exit(1)
+
+        if not unsolved.check_valid():
+            print("Illegal board")
+            exit(2)
+
+        if args.raw:
+            solver.solve(unsolved).print()
+        else:
+            solver.solve(unsolved).pretty_print()
+        exit(0)
+
+    if args.isolve:
         menu_solve()
-    elif sys.argv[1] == "generate":
+        exit(0)
+
+    if args.generate:
+        remove = {
+            "easy" : 25,
+            "medium" : 40,
+            "hard" : 55
+        }[args.generate]
+
+        s_board = generator.generate_solved()
+        u_board = generator.unsolve(s_board, remove)
+
+        if args.raw:
+            u_board.print()
+        else:
+            u_board.pretty_print()
+        exit(0)
+
+    if args.igenerate:
         menu_generate()
+        exit(0)
+
+    if args.play:
+        menu_play()
+        exit(0)
+
+    menu()
+

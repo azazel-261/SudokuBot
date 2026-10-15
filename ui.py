@@ -145,7 +145,8 @@ class InteractivePlayBoard(InteractiveBoard):
         self.select_row %= 9
         self.select_col %= 9
         if key == pynput.keyboard.Key.backspace:
-            self.board.data[self.select_row][self.select_col] = 0
+            if not self.initial_board.data[self.select_row][self.select_col]:
+                self.board.data[self.select_row][self.select_col] = 0
         try:
             if key.char.isdigit() and key.char != "0":
                 if not self.initial_board.data[self.select_row][self.select_col]:
