@@ -44,8 +44,6 @@ def unsolve(_board: Board, remove_target: int):
 
         removed += 1
 
-    print(f"Removed: {removed}")
-
     return board
 
 

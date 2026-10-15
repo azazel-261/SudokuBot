@@ -3,19 +3,19 @@ import board, solver, generator, ui
 import colorama, pynput, subprocess
 
 def menu_solve():
-    b = ui.InteractiveSolveBoard(board.Board())
+    interactive = ui.InteractiveSolveBoard(board.Board())
 
-    b.draw()
+    interactive.draw()
 
-    with pynput.keyboard.Listener(on_press=lambda key: b.on_keypress(key)) as listener:
+    with pynput.keyboard.Listener(on_press=lambda key: interactive.on_keypress(key)) as listener:
         listener.join()
 
     subprocess.call("cls", shell=True)
 
-    if not b.board.check_valid():
+    if not interactive.board.check_valid():
         print("Illegal board")
     else:
-        solved = solver.solve(b.board)
+        solved = solver.solve(interactive.board)
 
         if solved:
             solved.pretty_print()
@@ -23,6 +23,62 @@ def menu_solve():
             print("No solution found")
 
     print("\nPress any key to exit...")
+    with pynput.keyboard.Listener(on_press=lambda key: False) as listener:
+        listener.join()
+
+
+def menu_play():
+    difficulty_sel = ui.DifficultySelector()
+
+    difficulty_sel.draw()
+
+    with pynput.keyboard.Listener(on_press=lambda key: difficulty_sel.on_keypress(key)) as listener:
+        listener.join()
+
+    subprocess.call("cls", shell=True)
+
+    remove = [25, 40, 55][difficulty_sel.difficulty]
+
+    print("Generating...")
+
+    s_board = generator.generate_solved()
+    u_board = generator.unsolve(s_board, remove)
+
+    player = ui.InteractivePlayBoard(u_board)
+
+    player.draw()
+
+    with pynput.keyboard.Listener(on_press=lambda key: player.on_keypress(key)) as listener:
+        listener.join()
+
+    subprocess.call("cls", shell=True)
+
+    print("Good job!\n")
+    print("Press any key to exit...")
+    with pynput.keyboard.Listener(on_press=lambda key: False) as listener:
+        listener.join()
+
+
+def menu_generate():
+    difficulty_sel = ui.DifficultySelector()
+
+    difficulty_sel.draw()
+
+    with pynput.keyboard.Listener(on_press=lambda key: difficulty_sel.on_keypress(key)) as listener:
+        listener.join()
+
+    subprocess.call("cls", shell=True)
+
+    remove = [25, 40, 55][difficulty_sel.difficulty]
+
+    print("Generating...")
+
+    s_board = generator.generate_solved()
+    u_board = generator.unsolve(s_board, remove)
+
+    u_board.pretty_print()
+
+    print("Press any key to exit...")
     with pynput.keyboard.Listener(on_press=lambda key: False) as listener:
         listener.join()
 
@@ -41,4 +97,9 @@ if __name__ == "__main__":
         exit(0)
     if sel.sel_pos == 2:
         menu_solve()
+    if sel.sel_pos == 1:
+        menu_generate()
+    if sel.sel_pos == 0:
+        menu_play()
+
 

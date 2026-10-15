@@ -1,4 +1,4 @@
-import pynput, subprocess
+import pynput, subprocess, copy
 from colorama import Fore, Back
 
 from board import Board
@@ -37,6 +37,40 @@ class ActionSelector:
             print(f"> {opt}")
             print(Fore.RESET)
 
+
+class DifficultySelector:
+    def __init__(self):
+        self.difficulty = 0
+        self.actions = ["Easy", "Medium", "Hard"]
+
+    def on_keypress(self, key: pynput.keyboard.Key):
+        if key == pynput.keyboard.Key.enter:
+            return False
+        if key == pynput.keyboard.Key.up:
+            self.difficulty -= 1
+            self.difficulty %= len(self.actions)
+            self.draw()
+        if key == pynput.keyboard.Key.down:
+            self.difficulty += 1
+            self.difficulty %= len(self.actions)
+            self.draw()
+        return True
+
+    def draw(self):
+        subprocess.call("cls", shell=True)
+        print(Fore.BLUE + """\
+  ___  _  __  __ _         _ _        
+ |   \\(_)/ _|/ _(_)__ _  _| | |_ _  _ 
+ | |) | |  _|  _| / _| || | |  _| || |
+ |___/|_|_| |_| |_\\__|\\_,_|_|\\__|\\_, |
+                                 |__/ \
+    """ + Fore.RESET)
+        print("======================================================================\n")
+        for index, opt in enumerate(self.actions):
+            if index == self.difficulty:
+                print(Fore.BLUE, end="")
+            print(f"> {opt}")
+            print(Fore.RESET)
 
 
 class InteractiveBoard:
@@ -91,7 +125,37 @@ class InteractiveSolveBoard(InteractiveBoard):
 
     def draw(self):
         super().draw()
-        print("[↑ ↓ ← →] - move, [1 .. 9] - place numbers, [backspace] - remove numbers, [enter] - submit")
+        print("[↑ ↓ ← →] - move, [1 .. 9] - place numbers, [backspace] - remove numbers, [enter] - solve")
 
+class InteractivePlayBoard(InteractiveBoard):
+    def __init__(self, board):
+        super().__init__(board)
+        self.initial_board = copy.deepcopy(board)
+        self.solved = False
 
+    def on_keypress(self, key: pynput.keyboard.Key):
+        if key == pynput.keyboard.Key.up:
+            self.select_row -= 1
+        if key == pynput.keyboard.Key.down:
+            self.select_row += 1
+        if key == pynput.keyboard.Key.left:
+            self.select_col -= 1
+        if key == pynput.keyboard.Key.right:
+            self.select_col += 1
+        self.select_row %= 9
+        self.select_col %= 9
+        if key == pynput.keyboard.Key.backspace:
+            self.board.data[self.select_row][self.select_col] = 0
+        try:
+            if key.char.isdigit() and key.char != "0":
+                if not self.initial_board.data[self.select_row][self.select_col]:
+                    self.board.data[self.select_row][self.select_col] = int(key.char)
+        except AttributeError:
+            pass
+        self.draw()
+        return not self.board.check_solved()
+
+    def draw(self):
+        super().draw()
+        print("[↑ ↓ ← →] - move, [1 .. 9] - place numbers, [backspace] - remove numbers")
 

@@ -71,3 +71,10 @@ class Board:
                 if self.data[i][j] and self.data[i][j] not in self.find_valid_numbers(i, j):
                     return False
         return True
+
+    def check_solved(self):
+        for i in range(9):
+            for j in range(9):
+                if self.data[i][j] not in self.find_valid_numbers(i, j):
+                    return False
+        return True
