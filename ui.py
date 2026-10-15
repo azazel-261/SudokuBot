@@ -48,7 +48,6 @@ class InteractiveBoard:
 
     def draw(self):
         subprocess.call("cls", shell=True)
-        print(self.board.find_valid_numbers(self.select_row, self.select_col))
         print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")
         for i in range(9):
             print("║", end="")
@@ -78,6 +77,8 @@ class InteractiveSolveBoard(InteractiveBoard):
             self.select_col += 1
         self.select_row %= 9
         self.select_col %= 9
+        if key == pynput.keyboard.Key.enter:
+            return False
         if key == pynput.keyboard.Key.backspace:
             self.board.data[self.select_row][self.select_col] = 0
         try:
@@ -86,5 +87,11 @@ class InteractiveSolveBoard(InteractiveBoard):
         except AttributeError:
             pass
         self.draw()
+        return True
+
+    def draw(self):
+        super().draw()
+        print("[↑ ↓ ← →] - move, [1 .. 9] - place numbers, [backspace] - remove numbers, [enter] - submit")
+
 
 

@@ -1,20 +1,23 @@
-import copy
-import random
+import copy, random, subprocess
 from dataclasses import dataclass
 
 from board import Board
+
 
 @dataclass
 class BoardMoveTrace:
     index: int
     chosen_number_index: int
 
+
 @dataclass
 class RandomChoiceMoveTrace(BoardMoveTrace):
     options: list[int]
 
+
 class RollbackError(Exception):
     pass
+
 
 def rollback_to_last_decision(board: Board, stack: list[BoardMoveTrace]):
     while True:
@@ -33,6 +36,7 @@ def rollback_to_last_decision(board: Board, stack: list[BoardMoveTrace]):
             stack.pop()
         else:
             return i
+
 
 def solve(_board: Board):
     board = copy.deepcopy(_board)
@@ -60,12 +64,13 @@ def solve(_board: Board):
                 col = i % 9
                 row = i // 9
             except RollbackError:
-                return board
+                return None
 
             options = board.find_valid_numbers(row, col)
             stack[-1].chosen_number_index += 1
             board.data[row][col] = options[stack[-1].chosen_number_index]
     return board
+
 
 def get_random_solution(_board: Board):
     board = copy.deepcopy(_board)
@@ -100,6 +105,7 @@ def get_random_solution(_board: Board):
             stack[-1].chosen_number_index += 1
             board.data[row][col] = options[stack[-1].chosen_number_index]
     return board
+
 
 def count_valid_solutions(_board: Board):
     board = copy.deepcopy(_board)
