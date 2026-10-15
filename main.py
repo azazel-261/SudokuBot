@@ -1,3 +1,5 @@
+import sys
+
 import board, solver, generator, ui
 
 import colorama, pynput, subprocess
@@ -83,14 +85,12 @@ def menu_generate():
         listener.join()
 
 
-if __name__ == "__main__":
-    colorama.init()
-
+def menu():
     sel = ui.ActionSelector()
 
     sel.draw()
 
-    with pynput.keyboard.Listener(on_press = lambda key: sel.on_keypress(key)) as listener:
+    with pynput.keyboard.Listener(on_press=lambda key: sel.on_keypress(key)) as listener:
         listener.join()
 
     if sel.sel_pos == 3:
@@ -103,3 +103,16 @@ if __name__ == "__main__":
         menu_play()
 
 
+if __name__ == "__main__":
+    colorama.init()
+
+    if len(sys.argv) < 2:
+        menu()
+    elif sys.argv[1] == "menu":
+        menu()
+    elif sys.argv[1] == "play":
+        menu_play()
+    elif sys.argv[1] == "solve":
+        menu_solve()
+    elif sys.argv[1] == "generate":
+        menu_generate()
