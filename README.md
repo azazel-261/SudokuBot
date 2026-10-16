@@ -32,6 +32,10 @@ While running without arguments will always get you to the TUI, you can use, the
 - `--play` - skip the selector and go straight into the interactive playing board!
 - `-h / --help` - read all the same instructions again but in your terminal
 
+## Resources used:
 
-
-
+- [pynput](https://github.com/moses-palmer/pynput) Python library was used to handle keyboard input
+- [colorama](https://github.com/tartley/colorama) library was used for some colored text to avoid writing the escape sequences
+- The dependencies for the above-mentioned libraries
+- Public documentation and forums
+- Sleepless nights debugging all of this
