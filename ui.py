@@ -1,7 +1,12 @@
-import pynput, subprocess, copy
+import pynput, os, subprocess, copy
 from colorama import Fore, Back
 
 from board import Board
+from colorama.ansi import clear_screen
+
+
+def cls():
+    subprocess.call('cls' if os.name=='nt' else 'clear', shell=True)
 
 class ActionSelector:
     def __init__(self):
@@ -22,7 +27,7 @@ class ActionSelector:
         return True
 
     def draw(self):
-        subprocess.call("cls", shell=True)
+        cls()
         print(Fore.BLUE + """\
   ▄▄▄▄             █         █             ▄▄▄▄▄           ▄      ▄   
  █▀   ▀ ▄   ▄   ▄▄▄█   ▄▄▄   █   ▄  ▄   ▄  █    █  ▄▄▄   ▄▄█▄▄    █   
@@ -57,7 +62,7 @@ class DifficultySelector:
         return True
 
     def draw(self):
-        subprocess.call("cls", shell=True)
+        cls()
         print(Fore.BLUE + """\
   ___  _  __  __ _         _ _        
  |   \\(_)/ _|/ _(_)__ _  _| | |_ _  _ 
@@ -81,7 +86,7 @@ class InteractiveBoard:
         self.board = board
 
     def draw(self):
-        subprocess.call("cls", shell=True)
+        cls()
         print("╔═╤═╤═╦═╤═╤═╦═╤═╤═╗")
         for i in range(9):
             print("║", end="")

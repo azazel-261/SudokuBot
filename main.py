@@ -3,6 +3,8 @@ import sys, argparse
 import board, solver, generator, ui
 
 import colorama, pynput, subprocess
+from ui import cls
+
 
 def menu_solve():
     interactive = ui.InteractiveSolveBoard(board.Board())
@@ -12,7 +14,7 @@ def menu_solve():
     with pynput.keyboard.Listener(on_press=lambda key: interactive.on_keypress(key)) as listener:
         listener.join()
 
-    subprocess.call("cls", shell=True)
+    cls()
 
     if not interactive.board.check_valid():
         print("Illegal board")
@@ -37,7 +39,7 @@ def menu_play():
     with pynput.keyboard.Listener(on_press=lambda key: difficulty_sel.on_keypress(key)) as listener:
         listener.join()
 
-    subprocess.call("cls", shell=True)
+    cls()
 
     remove = [25, 40, 55][difficulty_sel.difficulty]
 
@@ -53,7 +55,7 @@ def menu_play():
     with pynput.keyboard.Listener(on_press=lambda key: player.on_keypress(key)) as listener:
         listener.join()
 
-    subprocess.call("cls", shell=True)
+    cls()
 
     print("Good job!\n")
     print("Press any key to exit...")
@@ -69,7 +71,7 @@ def menu_generate():
     with pynput.keyboard.Listener(on_press=lambda key: difficulty_sel.on_keypress(key)) as listener:
         listener.join()
 
-    subprocess.call("cls", shell=True)
+    cls()
 
     remove = [25, 40, 55][difficulty_sel.difficulty]
 
@@ -78,7 +80,7 @@ def menu_generate():
     s_board = generator.generate_solved()
     u_board = generator.unsolve(s_board, remove)
 
-    subprocess.call("cls", shell=True)
+    cls()
 
     u_board.pretty_print()
 
